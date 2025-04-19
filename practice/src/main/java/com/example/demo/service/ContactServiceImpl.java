@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,36 @@ public class ContactServiceImpl implements ContactService {
         contact.setBody(contactForm.getBody());
 
         contactRepository.save(contact);
+	}
+
+    @Override
+	public List<Contact> getAll(){
+    	
+    	//Contactテーブルの全件を取得しcontactsに格納
+    	 List<Contact> contacts = contactRepository.findAll();
+    	    
+    	return contacts;
     }
+ 
+	@Override
+	public Contact findById(Long id){
+
+		return contactRepository.findById(id).orElse(null);
+		
+	}
+	
+	//更新のsaveメソッド
+	
+	@Override
+	  public void update(Contact contact) {
+
+	    contactRepository.save(contact);
+	  }
+	
+	//contactの物理削除
+	@Override
+	  public void delete(Long id) {
+		  
+		    contactRepository.deleteById(id);
+		  }
 }
