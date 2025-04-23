@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,9 +16,6 @@ public class AdminServiceImpl implements AdminService {
 
 		@Autowired
 		private AdminRepository adminRepository;
-		
-		@Autowired
-		private PasswordEncoder passwordEncoder;
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -34,17 +33,54 @@ public class AdminServiceImpl implements AdminService {
 			
 		}
 		
+		@Autowired
+		private PasswordEncoder passwordEncoder;
+		
+		/*
+		@Override
+		public Optional<Admin>adminLogin(String email, String password) {
+		    Optional<Admin> adminOpt = adminRepository.findByEmail(email);
+		    
+		    
+		    }
+
+		    		/*
+		        .map(admin -> encoder.matches(password, admin.getPassword()))
+		        .orElse(false);
+		        */
+		
+		
+		
 		@Override
 		public boolean adminLogin(String email, String password) {
-			Admin admin = adminRepository.findByEmail(email);
-			System.out.println(encoder.encode(password));
-			System.out.println(admin.getPassword());
+			Optional<Admin> adminOpt = adminRepository.findByEmail(email);
 			
+			if(adminOpt.isPresent()) {
+				Admin admin = adminOpt.get();
+				
+				System.out.println(encoder.encode(password));
+				System.out.println(admin.getPassword());
+				
+				if(encoder.matches(password, admin.getPassword())) {
+					
+					return true;
+				}
+			}
 			
-			if(admin != null && encoder.matches(password,
-					admin.getPassword())) {
+			return false;
+			
+			/*
+			if(adminOpt != null && encoder.matches(password,
+					adminOpt.getPassword())) {
 				return true;
 			}
 			return false;
+		
+			
+	    public void adminLogin(String rawPassword) {
+	        String encodedPassword = passwordEncoder.encode(rawPassword);
+	        // エンコードしたパスワードで登録処理を行う
+	    }
+	    */
 		}
 }

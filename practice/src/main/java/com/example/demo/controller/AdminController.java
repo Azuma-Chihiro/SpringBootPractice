@@ -2,9 +2,14 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +32,15 @@ public class AdminController {
 	*/
 	
 	@GetMapping(value = "/admin/contacts")
-	public String index(Model model) {
+	public String index(Model model, HttpServletRequest request) {
 		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("isLoggedIn") == null) {
+			return "redirect:/admin/signin"; // ログインしていなければ、再度ログイン画面にリダイレクト
+		}
+		
+		//ログイン状態が確認できれば、お問い合わせ一覧を表示
 		//ServiceのgetAllを呼び出してデータを取得
 		List<Contact> contactlist = contactService.getAll();
 		
@@ -68,8 +80,12 @@ public class AdminController {
 	 */
 	
 	@PostMapping(value ="/admin/contacts/edit")
-	public String contactEdit(@ModelAttribute Contact contact) {
+	public String contactEdit(@Validated @ModelAttribute ("contactForm") Contact contact ,BindingResult bindingResult) {
 		
+		if(bindingResult.hasErrors()) {
+			
+			return "contactFrom";
+		}
 		
 		contactService.update(contact);
 		
