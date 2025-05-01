@@ -14,6 +14,8 @@ import lombok.Data;
 @Table(name = "admins")
 public class Admin {
 	@Id
+	
+	//この＠でプライマリーキーを自動生成
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
@@ -29,4 +31,5 @@ public class Admin {
     
     @Column(name = "password" , nullable = false)
     private String password;
+    
 }

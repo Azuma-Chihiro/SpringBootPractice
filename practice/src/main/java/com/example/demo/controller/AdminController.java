@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.entity.Contact;
+import com.example.demo.form.ContactForm;
 import com.example.demo.service.ContactService;
 
 //管理画面
@@ -34,18 +34,15 @@ public class AdminController {
 	@GetMapping(value = "/admin/contacts")
 	public String index(Model model, HttpServletRequest request) {
 		
-		HttpSession session = request.getSession(false);
+		System.out.println("来たよ");
 		
-		if (session == null || session.getAttribute("isLoggedIn") == null) {
-			return "redirect:/admin/signin"; // ログインしていなければ、再度ログイン画面にリダイレクト
-		}
 		
-		//ログイン状態が確認できれば、お問い合わせ一覧を表示
 		//ServiceのgetAllを呼び出してデータを取得
 		List<Contact> contactlist = contactService.getAll();
 		
 		//モデルでーたを追加してビューに渡す
 		model.addAttribute("contactlist", contactlist);
+		
 		return "index";
 	}
 	
@@ -69,6 +66,9 @@ public class AdminController {
 	@GetMapping(value = "/admin/contacts/{id}/edit")
 	public String displayEdit(@PathVariable Long id,Model model) {
 		Contact contactEdit = contactService.findById(id);
+		
+		
+		
 		model.addAttribute("contactEdit", contactEdit);
 
 		return "edit";
@@ -76,28 +76,43 @@ public class AdminController {
 	
 	/*
 	 * DBへ編集画面から受け取った情報を更新
-	 * 	    Contact contact = findById(contactUpdateRequest.getId());
 	 */
 	
-	@PostMapping(value ="/admin/contacts/edit")
-	public String contactEdit(@Validated @ModelAttribute ("contactForm") Contact contact ,BindingResult bindingResult) {
+	@PostMapping(value ="/admin/contacts/{id}/edit")
+	public String contactUpdate(@Validated @ModelAttribute ("contactForm") ContactForm form ,BindingResult errorResult, Model model) {
+		System.out.println("開始");
 		
-		if(bindingResult.hasErrors()) {
+		
+		
+		if(errorResult.hasErrors()) {
+			model.addAttribute("errorMessages", errorResult.getAllErrors());
+			System.out.println(form + "form");
 			
-			return "contactFrom";
+			model.addAttribute("contactEdit", form);
+			
+			System.err.println("失敗");
+			
+			return "edit";
 		}
 		
-		contactService.update(contact);
+		contactService.update(form);
+		
+		System.out.println("更新");
 		
 		return "redirect:/admin/contacts";
 	}
 	
+	
     //削除機能の追加
     @PostMapping("/admin/contacts/{id}/delete")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable ("id") Long id, Model model) {
     	
+    	System.out.println("消すよ");
 
     	contactService.delete(id);
+    	
+    	System.out.println(id + "ID");
+    	
       return "redirect:/admin/contacts";
     }
 }

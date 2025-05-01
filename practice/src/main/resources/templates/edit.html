@@ -6,7 +6,7 @@
 </head>
 <body>
 	<h1>お問い合わせ編集</h1>
-	<form th:action="@{/admin/contacts/edit}" th:object="${contactEdit}" method="post">
+	<form th:action="@{/admin/contacts/{id}/edit(id = *{id})}" th:object="${contactEdit}" method="post">
 		
 		<input type="text" th:field="*{id}" readonly>
 		
@@ -15,6 +15,7 @@
 					<td>姓</td>
 					<td>
 						<input type="text" th:field="*{lastName}">
+						<span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red"></span>
 					</td>
 				</tr>
 				<tr>
@@ -58,7 +59,7 @@
 				<td>お問い合わせ種別</td>
 				<td>
 					<select name="contactType">
-						<option value="servicces">サービスに関するお問い合わせ</option>
+						<option value="services">サービスに関するお問い合わせ</option>
 						<option value="technicalQuestions">技術的なお問い合わせ</option>
 						<option value="others">その他</option>
 					</select>
@@ -85,13 +86,16 @@
 		</table>
 
 			<input type="submit" value="保存">
-	</form>
 
-	<form th:action="@{/admin/contacts/{id}/delete(id=*{id})}" th:object="${contactEdit}" method="post">
-		<input type="submit" value="削除">
 	</form>
+	
+	<form th:action="@{/admin/contacts/{id}/delete(id = *{id})}" method="post">
+		<input  type="submit" value="削除">
+	</form>
+		
 	<a th:href="@{/admin/contacts}">一覧に戻る</a>
-	<a th:href="@{/admin/signin}">ログアウト</a>
+
+	<a th:href="@{/admin/signout}" class="btn btn-danger">ログアウト</a>
 	
 </body>
 </html>

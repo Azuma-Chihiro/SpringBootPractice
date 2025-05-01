@@ -2,13 +2,10 @@ package com.example.demo.controller;
 
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,16 +17,12 @@ import com.example.demo.service.AdminService;
 public class AdminUserController {
 	
 	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	
-	@Autowired
 	private AdminService adminService;
 
 	/*adminUser新規登録の画面表示
 	 * return contact情報一覧; */
 	
-	@GetMapping(value = "/admin/signup")
+	@GetMapping("/admin/signup")
 	public String getSignup(@ModelAttribute AdminUserForm adminUserForm) {
 		
 		return "signup";
@@ -62,68 +55,25 @@ public class AdminUserController {
 	  }
 	
 	/*adminUserログイン画面の実装
-	 * return ログイン;
-	 */
+	  return ログイン;*/
+	 
 	
-	@GetMapping(value="/admin/signin")
-	public String getLogin(Model model, HttpServletRequest request) {
+	@GetMapping("/admin/signin")
+	public String getLogin() {
 		
-		
-		
-		AdminUserForm adminUserForm = new AdminUserForm();
-		model.addAttribute("adminUserForm", adminUserForm);
+		System.out.println("戻ったよ");
 		
 		return "signin";
 	}
 	
 	
-	@PostMapping("/admin/signin")
-	public String Login(@ModelAttribute ("adminUserForm") AdminUserForm adminUserForm , HttpServletRequest request) {
-	    // セッションから保存された情報を取得
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("adminUserForm", adminUserForm);
-	
-		AdminUserForm login = (AdminUserForm) session.getAttribute("adminUserForm");
-		
-		System.out.println("ログイン処理開始");
-		
-		// return "redirect:/admin/signin";
-		
-		System.out.println(adminUserForm.getEmail());
-		System.out.println(adminUserForm.getPassword());
-		
-		boolean Login = adminService.adminLogin(adminUserForm.getEmail(),adminUserForm.getPassword());
-		System.out.println(Login);
-		
-	    
-	    if (!Login){
-	    	
-	    	System.err.println("ログイン失敗しました。");
-	    	
-	    	//失敗時
-	        return "redirect:/admin/signin";
-	    }else{
-
-	    	HttpSession loginSession = request.getSession();
-		    loginSession.setAttribute("isLoggedIn", true);
-	    	
-	    // 認証成功時
-	    System.out.println("ログイン成功しました。");
-	    return "redirect:/admin/contacts";
-	    }
-	    
-	}
-	
-	
 	@GetMapping("/admin/signout")
-	public String signout(@ModelAttribute AdminUserForm adminUserForm ,HttpServletRequest request) {
+	public String getLogout(HttpSession session) {
+		session.invalidate();
 		
-		HttpSession session = request.getSession(false); // 既存セッションがあれば取得
-	    if (session != null) {
-	        session.invalidate(); // セッション破棄
-	    }
+		System.out.println("出たよ");
 		
-		return "redirect:/adming/signin";
+		return "redirect:/admin/signin";
 	}
+	
 }

@@ -19,7 +19,7 @@ public interface ContactService {
 	
 	Contact findById(Long id);
 
-	void update(Contact contact);
+	void update(ContactForm form);
 	
 	void delete(Long id);
 	

@@ -10,17 +10,17 @@
 </head>
 <body class="text-center">
     <h1>Login</h1>
-    <form method="post" th:action="@{/admin/signin}" th:object="${adminUserForm}">
+    <form th:action="@{/admin/signin}" method="post">
 		
 		<div th:if="${param.error}" class="text-danger">
 		    <p>ユーザー名またはパスワードが間違っています。</p>
 		</div>
 		
         <label>メールアドレス</label>
-        <input type="text" th:field="*{email}" /><br/>
+        <input type="text" name="email" /><br/>
         <br />
         <label>パスワード</label>
-        <input type="password" th:field="*{password}" /><br/>
+        <input type="password" name="password" /><br/>
         <br />
         <button class="btn btn-primary" type="submit">ログイン</button>
     </form>

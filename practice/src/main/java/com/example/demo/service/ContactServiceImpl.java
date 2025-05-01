@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,22 +44,38 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public Contact findById(Long id){
 
-		return contactRepository.findById(id).orElse(null);
+		return contactRepository.findById(id)
+				.orElseThrow(() -> new NoSuchElementException("idが見つかりません"));
 		
 	}
 	
 	//更新のsaveメソッド
 	
 	@Override
-	  public void update(Contact contact) {
+    public void update(ContactForm form) {
+		
+		//既存のデータを取得
+		Contact con = contactRepository.findById(form.getId())
+				.orElseThrow(() -> new NoSuchElementException("idが見つかりません。"));
 
-	    contactRepository.save(contact);
-	  }
+		con.setLastName(form.getLastName());
+		con.setFirstName(form.getFirstName());
+		con.setEmail(form.getEmail());
+        con.setPhone(form.getPhone());
+        con.setZipCode(form.getZipCode());
+        con.setAddress(form.getAddress());
+        con.setBuildingName(form.getBuildingName());
+        con.setContactType(form.getContactType());
+        con.setBody(form.getBody());
+		
+		contactRepository.save(con);
+	}
+
 	
 	//contactの物理削除
 	@Override
 	  public void delete(Long id) {
-		  
+		
 		    contactRepository.deleteById(id);
-		  }
+	}
 }
