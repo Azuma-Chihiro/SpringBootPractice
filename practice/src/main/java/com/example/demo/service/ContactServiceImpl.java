@@ -49,6 +49,27 @@ public class ContactServiceImpl implements ContactService {
 		
 	}
 	
+	//ContactをFormに渡す
+	@Override
+	public ContactForm giveContact(Contact contact) {
+		ContactForm contactForm = new ContactForm();
+		
+		contactForm.setId(contact.getId());
+		contactForm.setLastName(contact.getLastName());
+		contactForm.setFirstName(contact.getFirstName());
+		contactForm.setEmail(contact.getEmail());
+        contactForm.setPhone(contact.getPhone());
+        contactForm.setZipCode(contact.getZipCode());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setBuildingName(contact.getBuildingName());
+        contactForm.setContactType(contact.getContactType());
+        contactForm.setBody(contact.getBody());
+        contactForm.setCreated_at(contact.getCreated_at());
+        contactForm.setUpdated_at(contact.getUpdated_at());
+		
+		return contactForm;
+	}
+	
 	//更新のsaveメソッド
 	
 	@Override

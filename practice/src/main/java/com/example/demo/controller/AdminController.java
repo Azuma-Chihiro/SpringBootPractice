@@ -67,9 +67,12 @@ public class AdminController {
 	public String displayEdit(@PathVariable Long id,Model model) {
 		Contact contactEdit = contactService.findById(id);
 		
+		//ContactをcontactFormを渡す処理
+		ContactForm contactForm = contactService.giveContact(contactEdit);
 		
 		
-		model.addAttribute("contactEdit", contactEdit);
+		
+		model.addAttribute("contactForm", contactForm);
 
 		return "edit";
 	}
@@ -79,22 +82,17 @@ public class AdminController {
 	 */
 	
 	@PostMapping(value ="/admin/contacts/{id}/edit")
-	public String contactUpdate(@Validated @ModelAttribute ("contactForm") ContactForm form ,BindingResult errorResult, Model model) {
+	public String contactUpdate(@Validated @ModelAttribute ("contactForm") ContactForm form ,BindingResult errorResult,Model model) {
 		System.out.println("開始");
 		
-		
-		
 		if(errorResult.hasErrors()) {
-			model.addAttribute("errorMessages", errorResult.getAllErrors());
-			System.out.println(form + "form");
-			
-			model.addAttribute("contactEdit", form);
-			
+//			model.addAttribute("contactEdit", form);
+//			model.addAttribute("errorMessages", errorResult.getAllErrors());
 			System.err.println("失敗");
 			
 			return "edit";
 		}
-		
+
 		contactService.update(form);
 		
 		System.out.println("更新");

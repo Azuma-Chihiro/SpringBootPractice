@@ -21,6 +21,8 @@ public interface ContactService {
 
 	void update(ContactForm form);
 	
+	public ContactForm giveContact(Contact contact);
+	
 	void delete(Long id);
 	
 }
