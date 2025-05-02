@@ -33,19 +33,14 @@ public class WebSecurityConfig{
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
 		http
-		
 		.authorizeHttpRequests(
 				auth -> auth
 				.requestMatchers("/admin/signup","/admin/signin", "/css/**", "/admin/contacts/{id}","/admin/contacts/{id}/edit")
 				.permitAll()
-				.requestMatchers("/contacts/**").permitAll()
-				//.authenticated()
-				//.anyRequest()
 				.requestMatchers("/admin/**")
 				.authenticated()
 				)
-			//未ログインユーザーに飛ぶ、ログインしてる人にはトップページ
-		
+
 		.formLogin(login -> login
 				.loginPage("/admin/signin")//ログインページ指定
 				.usernameParameter("email")
@@ -53,11 +48,8 @@ public class WebSecurityConfig{
 				.loginProcessingUrl("/admin/signin")
 				
 				.defaultSuccessUrl("/admin/contacts", true)//ログイン成功時のページ指定
-				//.successForwardUrl("/admin/contacts")
 				.permitAll()
 				)
-		.csrf(csrf -> csrf.disable())//無効か 書かなくても動く処理、制限がかかっていても通るようにする
-		
         .logout(logout -> logout
                 .logoutUrl("/admin/signout") // ログアウト用のURL
                 .logoutSuccessUrl("/admin/signin") // ログアウト成功後のリダイレクト先
@@ -70,5 +62,5 @@ public class WebSecurityConfig{
 		auth.userDetailsService(customUserDetailsServiceImpl).passwordEncoder(passwordEncoder());
 		
 	}
-	
+
 }
