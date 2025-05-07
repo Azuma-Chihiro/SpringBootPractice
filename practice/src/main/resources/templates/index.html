@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ログインTOP画面</title>
+</head>
+<body>
+	<h1>お問い合わせ情報一覧</h1>
+	
+	<form th:action="@{/admin/contacts}" th:object="${contactlist}" method="post">
+		<table border="1">
+				<tr>
+					<th>お問い合わせ</th>
+					<th>名前</th>
+					<th>種別</th>
+					<th>作成日時</th>
+					<th>更新日時</th>
+				</tr>
+			
+				<tr th:each="contact : ${contactlist}" th:object="${contact}">
+					<td>
+					<span th:text="*{id}"></span>
+					</td>
+					<td>
+					<span th:text="*{lastName}"></span>
+					<span th:text="*{firstName}"></span>
+					</td>
+					<td>
+					<span th:text="*{contactType}"></span>
+					</td>
+					<td>
+						<span th:text="*{created_at}"></span>
+					</td>
+					<td>
+						<span th:text="*{updated_at}"></span>
+					</td>
+					<td>
+						<a th:href="@{/admin/contacts/{id}(id = *{id})}">詳細</a>
+					</td>
+				</tr>
+		</table>
+	</form>
+	<a th:href="@{/admin/signout}" class="btn btn-danger">ログアウト</a>
+
+</body>
+</html>

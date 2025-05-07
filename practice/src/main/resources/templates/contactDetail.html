@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>お問い合わせ詳細</title>
+</head>
+<body>
+	<h1>お問い合わせ詳細</h1>
+	<a href="/admin/contacts">お問い合わせ一覧</a>
+	
+	<form th:action="@{/admin/contacts/:id}" th:object="${contactslist}" method="post">
+		<table border="1">
+			<tr>
+				<th>お問い合わせID</th>
+				<th>姓</th>
+				<th>名</th>
+				<th>メールアドレス</th>
+				<th>電話番号</th>
+				<th>郵便番号</th>
+				<th>住所</th>
+				<th>建物名</th>
+				<th>お問い合わせ種別</th>
+				<th>内容</th>
+				<th>作成日時</th>
+				<th>更新日時</th>
+			</tr>
+			
+			<tr th:each="contact : ${contactslist}" th:object="${contact}">
+				<td>
+				<span th:text="*{id}"></span>
+				</td>
+				<td>
+					<span th:text="*{lastName}"></span>
+				</td>
+				<td>		
+					<span th:text="*{firstName}"></span>
+				<td>
+					<span th:text="*{email}"></span>
+				</td>
+				<td>
+					<span th:text="*{phone}"></span>
+				</td>
+				<td>
+					<span th:text="*{zipCode}"></span>
+				</td>
+				<td>
+					<span th:text="*{address}"></span>
+				</td>
+				<td>
+					<span th:text="*{buildingName}"></span>
+				</td>
+				<td>
+					<span th:text="*{contactType}"></span>
+				</td>
+				<td>
+					<span th:text="*{body}"></span>
+				</td>
+				<td>
+					<span th:text="*{created_at}"></span>
+				</td>
+				<td>
+					<span th:text="*{updated_at}"></span>
+				</td>
+			</tr>
+		</table>
+	</form>
+	
+	<a th:href="@{/admin/contacts/{id}/edit(id = *{id})}">編集画面へ</a>
+	<a th:href="@{/admin/signout}" class="btn btn-danger">ログアウト</a>
+
+</body>
+</html>
