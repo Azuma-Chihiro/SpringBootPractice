@@ -26,10 +26,13 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 	public CustomUserDetailsServiceImpl(@Lazy AdminRepository adminRepository) {
 		this.adminRepository = adminRepository;
 	}
+	
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Admin admin = adminRepository.findByEmail(email);
+		
+		System.out.print("ログイン開始");
 		
 		List<GrantedAuthority> grant = new ArrayList<GrantedAuthority>();
 		

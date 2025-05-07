@@ -35,9 +35,9 @@ public class WebSecurityConfig{
 		http
 		.authorizeHttpRequests(
 				auth -> auth
-				.requestMatchers("/admin/signup","/admin/signin", "/css/**", "/admin/contacts/{id}","/admin/contacts/{id}/edit")
+				.requestMatchers("/admin/signup","/admin/signin", "/css/**", "/contact/**" )
 				.permitAll()
-				.requestMatchers("/admin/**")
+				.anyRequest()
 				.authenticated()
 				)
 
